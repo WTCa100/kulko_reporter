@@ -10,39 +10,55 @@ usage()
 
 get_uptime()
 {
-    echo "$(uptime) ($(uptime -p))"
+    echo "<h3>Uptime</h3>"
+    echo "<pre>$(uptime) ($(uptime -p))</pre>"
 }
 
 get_disk_space()
 {
-    printf '%b' "$(df -h / /boot/efi)"
+    echo "<h3>Disk usage</h3>"
+    echo "<pre>$(df -h / /boot/efi)</pre>"
 }
 
 get_home_disk_utility()
 {
-    echo -e "$(du -hs --time $1) " &2>/dev/null
+    FORMAT="%s\t%s\t%s\n"
+    dir_list=
+    if (( "$(id -u)" == 0 )); then
+        dir_list="/home/*"
+    else
+        dir_list=$HOME/Desktop/*
+    fi
+
+    echo "<h3>Home disk utility</h3>"
+
+    for i in $dir_list; do
+        echo "<h4>$i</h4>"
+        echo "<pre>"
+        total_files="$(find "$i" -type f | wc -l)"
+        total_dirs="$(find "$i" -type d | wc -l)"
+        total_size="$(du -sh "$i" | cut -f 1)"
+        printf "$FORMAT" "Files" "Dirs" "Size"
+        printf "$FORMAT" "-----" "----" "----"
+        printf "$FORMAT" "$total_files" "$total_dirs" "$total_size"
+        echo "</pre>"
+    done
 }
 
 write_html_file()
 {
-    home_dir=
-    if (( "$(id -u)" == 0 )); then
-        home_dir="/home"
-    else
-        home_dir=$HOME
-    fi
-
     # at this point filename must be present no need for additional checks
     cat << _EOF_
 <html>
 <head>
-    <title>$(basename $filename)</title>
+    <title>$(basename "$filename")</title>
     <style>
         body {
             margin-right: 10%
         }
         div {
-            border: thick double
+            border: thick double;
+            padding-left: 10px
         }
     </style>
 </head>
@@ -50,13 +66,13 @@ write_html_file()
     <h1>Report triggered for user: $USER</h1>
     <hr>
     <div>
-    <pre>$(get_uptime)</pre>
+        $(get_uptime)
     </div>
     <div>
-        <pre>$(get_disk_space)</pre>
+        $(get_disk_space)
     </div>
     <div>
-        <pre>$(get_home_disk_utility $home_dir)</pre>
+        $(get_home_disk_utility)
     </div>
 </body>
 </html>
@@ -111,8 +127,8 @@ if [[ -n $interactive ]]; then
         while [[ -z $overwrite ]]; do
             read -r -p "Provided file already exists. Overwrite? [y/n/q] "
             case $REPLY in 
-                y|Y) overwrite=1;;
-                n|N)
+                [yY]) overwrite=1;;
+                [nN])
                      date_full="$(date +"%x %r %Z")"
                      date_formated="$(date -d "$date_full" "+%Y%m%d%H%M%S")"
                      filename="system_report_$date_formated.html"
@@ -120,7 +136,7 @@ if [[ -n $interactive ]]; then
                      filename="$(pwd)/$filename"
                      overwrite=0
                      ;;
-                q|Q)
+                [qQ])
                      echo "Aborting report dump..."
                      exit 0
                      ;;
@@ -131,4 +147,4 @@ if [[ -n $interactive ]]; then
 fi
 
 
-((write_html_file) > $filename && echo "Report done") || write_html_file
+( (write_html_file) > $filename && echo "Report done") || write_html_file
