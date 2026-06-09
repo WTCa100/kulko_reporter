@@ -1,6 +1,7 @@
 #!/bin/bash
+# shellcheck disable=SC2059
 
-PROGNAME="$(basename $0)"
+PROGNAME="$(basename "$0")"
 
 usage()
 {
@@ -140,11 +141,11 @@ if [[ -n $interactive ]]; then
                      echo "Aborting report dump..."
                      exit 0
                      ;;
-                *) echo ??;;
+                *) echo "??";;
             esac
         done
     fi
 fi
 
 
-( (write_html_file) > $filename && echo "Report done") || write_html_file
+( (write_html_file) > "$filename" && echo "Report done") || write_html_file
