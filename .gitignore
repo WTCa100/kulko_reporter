@@ -1,0 +1,7 @@
+# Ignore everything
+*
+
+# Unless its these files
+!.gitignore
+!kreport.sh
+!README.md
