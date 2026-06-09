@@ -2,7 +2,7 @@
 This is a reporter shell script that was created according with the book "The Linux Command Line" by William E. Shots
 
 # Usage
-To execute the script type, for basic and interactive usage use:
+To execute the script for basic and interactive usage use:
 ```bash
 ./kreport.sh -i
 ```
@@ -18,4 +18,4 @@ That way a friendly prompt will ask you for your next action:
 ```txt
 Provided file already exists. Overwrite? [y/n/q] 
 ```
-If `n` option is choosen, a file will be generated but under a generic name _system_report_YYYYMMDDHHmmSS.html_ ensuring no files will be lost.
+If `n` option is choosen, a file will be generated but under a generic name *system_report_YYYYMMDDHHmmSS.html* ensuring no files will be lost.
