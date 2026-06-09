@@ -4,15 +4,15 @@ This is a reporter shell script that was created according with the book "The Li
 # Usage
 To execute the script type, for basic and interactive usage use:
 ```bash
-./reporter.sh -i
+./kreport.sh -i
 ```
 You can also pass a path directly into the script
 ```bash
-./reporter.sh -f /path/to/file.html
+./kreport.sh -f /path/to/file.html
 ```
 To be extra sure to not overwrite anything one can use a combination of `-i` and `-f`
 ```bash
-./reporter.sh -f /path/to/file.html -i
+./kreport.sh -f /path/to/file.html -i
 ```
 That way a friendly prompt will ask you for your next action:
 ```txt
