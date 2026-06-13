@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROGNAME=$(basename $0)
+PROGNAME=$(basename "$0")
 
 usage() {
     message="$(cat << EOF
@@ -43,11 +43,11 @@ get_input_int()
     until (( valid == 1 )); do
         read -r -p "Please provide an integer value:"
 
-        if [[ $(is_int $REPLY) -eq 1 ]]; then
+        if [[ $(is_int "$REPLY") -eq 1 ]]; then
             valid=1
         fi
     done
-    echo $REPLY
+    echo "$REPLY"
 }
 
 get_input_float()
@@ -55,11 +55,11 @@ get_input_float()
     valid=0
     until (( valid == 1 )); do
         read -r -p "Please provide a floating point value:"
-        if [[ $(is_float $REPLY) -eq 1 ]]; then
+        if [[ $(is_float "$REPLY") -eq 1 ]]; then
             valid=1
         fi
     done
-    echo $REPLY
+    echo "$REPLY"
 }
 
 interactive=0
@@ -85,7 +85,7 @@ while getopts ":ip:r:n:h" option; do
                 usage && exit 1
             fi
 
-            if [[ $(is_int $OPTARG) -eq 0 ]]; then
+            if [[ $(is_int "${OPTARG}") -eq 0 ]]; then
                 usage && exit 1;
             fi
 
@@ -100,7 +100,7 @@ while getopts ":ip:r:n:h" option; do
                 echo "Debug: Invalid use of parameters"
                 usage && exit 1
             fi
-            if [[ $(is_float $OPTARG) -eq 0 ]]; then
+            if [[ $(is_float "${OPTARG}") -eq 0 ]]; then
                 usage && exit 1
             fi
             intrest="${OPTARG}"
@@ -111,7 +111,7 @@ while getopts ":ip:r:n:h" option; do
     esac
 done
 
-if (( $interactive == 1 )); then
+if (( interactive == 1 )); then
     echo "What is the initial \$ input?"
     initial_payment="$(get_input_int)"
     echo "What is the intrest rate?"
