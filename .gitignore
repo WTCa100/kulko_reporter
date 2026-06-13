@@ -2,6 +2,7 @@
 *
 
 # Unless its these files
+!*.sh
 !.gitignore
-!kreport.sh
 !README.md
+!extra/
